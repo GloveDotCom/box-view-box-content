@@ -10,7 +10,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
+    """A simple wrapper around the Box View API
 
+    Args:
+        api_token: A valid box view api token, get one here: bit.ly/boxapikey
+
+    Attributes:
+
+    """
     try:
         root_folder_files = get_folder_files()
     except Exception as ex:
@@ -21,6 +28,14 @@ def hello():
 
 @app.route('/view/<file_id>')
 def view(file_id):
+    """A simple wrapper around the Box View API
+
+    Args:
+        api_token: A valid box view api token, get one here: bit.ly/boxapikey
+
+    Attributes:
+
+    """
 
     try:
         boxcloud_link = get_boxcloud_for_file(file_id)
@@ -43,6 +58,7 @@ def view(file_id):
         document_resource = '{}/{}'.format(documents_resource, document_id)
         url = s.VIEW_API_URL + document_resource
         api_response = requests.get(url, headers=headers)
+        print api_response.json()
         status = api_response.json()['status']
         if status == 'done':
             break
@@ -52,7 +68,7 @@ def view(file_id):
             time.sleep(1)
 
     if status != 'done':
-        return 'There was a problem generating a preview for this document', 500
+        return 'There was a problem generating a preview for this document! The error message provide by the api is "{}"'.format(api_response.json()['error_message']), 500
 
     sessions_resource = '/sessions'
     url = s.VIEW_API_URL + sessions_resource
@@ -62,14 +78,21 @@ def view(file_id):
     session_id = api_response.json()['id']
 
     # TODO(seanrose): make the view base url in settings.py usable here
-    view_base_url = 'https://view-api.box.com/view'
-    view_url = '{}/{}'.format(view_base_url, session_id)
-
+    #view_base_url = 'https://view-api.box.com/view'
+    view_url = '{}/{}/view?theme=dark'.format(s.SESSIONS_URL, session_id)
+    print view_url
     return redirect(view_url)
 
 
 def get_folder_items(folder_id=0):
+    """A simple wrapper around the Box View API
 
+    Args:
+        api_token: A valid box view api token, get one here: bit.ly/boxapikey
+
+    Attributes:
+
+    """
     folders_resource = '/folders/{}/items'.format(folder_id)
     url = s.CONTENT_API_URL + folders_resource
     auth = {'Authorization': 'Bearer {}'.format(s.CONTENT_ACCESS_TOKEN)}
@@ -81,7 +104,14 @@ def get_folder_items(folder_id=0):
 
 
 def get_folder_files(folder_id=0):
+    """A simple wrapper around the Box View API
 
+    Args:
+        api_token: A valid box view api token, get one here: bit.ly/boxapikey
+
+    Attributes:
+
+    """
     folder_items = get_folder_items(folder_id)
 
     folder_files = [
@@ -95,7 +125,14 @@ def get_folder_files(folder_id=0):
 
 
 def get_boxcloud_for_file(file_id):
+    """A simple wrapper around the Box View API
 
+    Args:
+        api_token: A valid box view api token, get one here: bit.ly/boxapikey
+
+    Attributes:
+
+    """
     files_resource = '/files/{}/content'.format(file_id)
     url = s.CONTENT_API_URL + files_resource
     auth = {'Authorization': 'Bearer {}'.format(s.CONTENT_ACCESS_TOKEN)}
