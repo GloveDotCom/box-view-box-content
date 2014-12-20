@@ -1,3 +1,4 @@
+# coding=utf-8
 from flask import Flask, jsonify, redirect
 import requests
 import time
@@ -10,16 +11,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    """A simple wrapper around the Box View API
+    """A simple route they will return a JSON structure of files in your root box directory
 
     Args:
-        api_token: A valid box view api token, get one here: bit.ly/boxapikey
-
-    Attributes:
+        None
 
     """
     try:
-        root_folder_files = get_folder_files()
+        root_folder_files = get_folder_files()   #gets root folder files
     except Exception as ex:
         return 'There was a problem using the Box Content API: {}'.format(ex.message), 500
 
@@ -28,12 +27,10 @@ def hello():
 
 @app.route('/view/<file_id>')
 def view(file_id):
-    """A simple wrapper around the Box View API
+    """Uses Content API and View API to generate a URL for the file_id provided
 
     Args:
-        api_token: A valid box view api token, get one here: bit.ly/boxapikey
-
-    Attributes:
+        file_id: Box’s unique string identifying a file.
 
     """
 
@@ -58,7 +55,7 @@ def view(file_id):
         document_resource = '{}/{}'.format(documents_resource, document_id)
         url = s.VIEW_API_URL + document_resource
         api_response = requests.get(url, headers=headers)
-        print api_response.json()
+        #print api_response.json()
         status = api_response.json()['status']
         if status == 'done':
             break
@@ -80,7 +77,7 @@ def view(file_id):
     # TODO(seanrose): make the view base url in settings.py usable here
     #view_base_url = 'https://view-api.box.com/view'
     view_url = '{}/{}/view?theme=dark'.format(s.SESSIONS_URL, session_id)
-    print view_url
+    #print view_url
     return redirect(view_url)
 
 
@@ -125,22 +122,20 @@ def get_folder_files(folder_id=0):
 
 
 def get_boxcloud_for_file(file_id):
-    """A simple wrapper around the Box View API
+    """Function that retrieves the location (URL) of the file via the response's header
 
     Args:
-        api_token: A valid box view api token, get one here: bit.ly/boxapikey
-
-    Attributes:
-
+        file_id: Box’s unique string identifying a file.
     """
-    files_resource = '/files/{}/content'.format(file_id)
-    url = s.CONTENT_API_URL + files_resource
+
+    files_resource = '/files/{}/content'.format(file_id) #builds the UR: w/ file_id
+    url = s.CONTENT_API_URL + files_resource             # build the final URL with API's path
     auth = {'Authorization': 'Bearer {}'.format(s.CONTENT_ACCESS_TOKEN)}
 
-    api_response = requests.get(url, headers=auth, allow_redirects=False)
-    api_response.raise_for_status()
+    api_response = requests.get(url, headers=auth, allow_redirects=False) #makes requests
+    api_response.raise_for_status()                                        #check for errors
 
-    boxcloud_link = api_response.headers['Location']
+    boxcloud_link = api_response.headers['Location']      #the response header is where the location URL is found
 
     return boxcloud_link
 
