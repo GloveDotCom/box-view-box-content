@@ -26,10 +26,10 @@ def hello():
 
 @app.route('/view/<file_id>')
 def view(file_id):
-    """Uses Content API and View API to generate a URL for the file_id provided
+    """ Uses Content API and View API to generate a URL for the file_id provided
 
     Args:
-        file_id: Box’s unique string identifying a file.
+        file_id: Box's unique string identifying a file.
 
     """
 
@@ -48,7 +48,7 @@ def view(file_id):
     data = json.dumps({'url': boxcloud_link})     # stores the URL for a POST (upload) request to view api
     api_response = requests.post(url, headers=headers, data=data) # sends the POST request
     document_id = api_response.json()['id']         # obtains the id for the document that was uploaded to the view api
-    
+
     for i in range(30):      # for loop to give the files 30 secs to process
         document_resource = '{}/{}'.format(documents_resource, document_id)   # build the resource with doc id
         url = s.VIEW_API_URL + document_resource                              # built URL
@@ -117,7 +117,7 @@ def get_boxcloud_for_file(file_id):
     """Function that retrieves the location (URL) of the file via the response's header
 
     Args:
-        file_id: Box’s unique string identifying a file.
+        file_id: Box's unique string identifying a file.
     """
 
     files_resource = '/files/{}/content'.format(file_id) # builds the resource
