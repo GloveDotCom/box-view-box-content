@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    """A simple route they will return a JSON structure of files in your root box directory
+    """A simple route that will return a JSON structure of files in your root box directory
 
     Args:
         None
@@ -18,7 +18,7 @@ def hello():
 
     try:
         # gets root folder files/items
-        root_folder_files = get_folder_files()
+        root_folder_files = get_folder_items(folder_id=0) #change to items for navigations
     except Exception as ex:
         return 'There was a problem using the Box Content API: {}'.format(ex.message), 500
 
@@ -72,7 +72,7 @@ def view(file_id):
         return 'There was a problem generating a preview for this document! \
                 The error message provide by the api is "{}"'.format(api_response.json()['error_message']), 500
 
-    # In order to view the doc without a token one needs an session
+    # In order to view the doc without a token one needs a session
     sessions_resource = '/sessions'
     url = s.VIEW_API_URL + sessions_resource
     data = json.dumps({'document_id': document_id})
@@ -84,9 +84,29 @@ def view(file_id):
 
     return redirect(view_url)
 
+@app.route('/folder/<folder_id>/<type>')
+def folder_view_type(folder_id,type):
+    """A function that will return items of a specific type from a folder
+
+    :param folder_id: Box's unique string identifying a folder.
+    :param type: A Box object type
+    :return: JSON structure containing a list of files
+    """
+
+    return jsonify(get_folder_files(folder_id,type=type))
+
+@app.route('/folder/<folder_id>')
+def folder_view(folder_id):
+    """ A function that will return all files in the specific folder
+
+    :param file_id: Box's unique string identifying a file.
+    :return: JSON structure containing a list of files
+    """
+    return jsonify(get_folder_items(folder_id))
+
 
 def get_folder_items(folder_id=0):
-    """ A function that returns a list of items found in the folder_id provided via Content API
+    """ A function that returns a list of all items found in a folder provided via Content API
 
     Args:
         folder_id: A valid folder's ID - default value is 0
@@ -101,9 +121,8 @@ def get_folder_items(folder_id=0):
 
     return api_response.json()
 
-
-def get_folder_files(folder_id=0):
-    """A function that will return a folder and its items via Content API
+def get_folder_files(folder_id, type='file'):
+    """A function that will return items of a specific folder via Content API
 
     Args:
         folder_id: A valid folder's ID - default value is 0 (root folder)
@@ -113,7 +132,7 @@ def get_folder_files(folder_id=0):
 
     # loop to obtain only items of type file
     folder_files = [
-        item for item in folder_items['entries'] if item['type'] == 'file'
+        item for item in folder_items['entries'] if item['type'] == type
     ]
     # store files in the folder_items list
 
