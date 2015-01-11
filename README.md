@@ -1,3 +1,4 @@
+
 box-view-box-content
 ====================
 
@@ -28,3 +29,20 @@ In `settings.py`, update `VIEW_API_KEY` and `CONTENT_ACCESS_TOKEN` to be your ow
 ## Run the app
 
     python app.py
+    
+## Services Exposed 
+    /
+    Site Map - A list of all exposed services
+    
+    /hello
+    A simple route displaying your base folder items 
+    
+    /folder/[folder_id]"
+    Display a specific folder's items  
+    
+    /view/[file_id]
+    Given a specific file id convert it into HTML using the VIEW API
+    
+    /folder/[folder_id]/[type]
+    Display a specific type of item found in a folder [ex: 'file' or 'folder']
+
