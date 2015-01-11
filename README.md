@@ -1,4 +1,5 @@
-box-view-box-content
+
+x-view-box-content
 ====================
 
 Showing how to use the Box Content API with the Box View API
@@ -28,3 +29,20 @@ In `settings.py`, update `VIEW_API_KEY` and `CONTENT_ACCESS_TOKEN` to be your ow
 ## Run the app
 
     python app.py
+    
+## Services Exposed 
+    /
+    A site map - list all exposed services
+    
+    /hello
+    A simple route displaying your base folder items 
+    
+    /folder/[folder_id]"
+    Display a specific folder's items  
+    
+    /view/[file_id]
+    Given a specific file id convert into HTML using VIEW API
+    
+    /folder/[folder_id]/[type]
+    Display a specific item type in a folder
+
