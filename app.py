@@ -1,14 +1,44 @@
-from flask import Flask, jsonify, redirect
+from flask import Flask, jsonify, redirect, url_for
 import requests
 import time
 import settings as s
 import json
-
+import urllib
+import sys
 
 app = Flask(__name__)
 
-
 @app.route('/')
+def site_map():
+    """Print available functions..."""
+    output = {}
+    # lists all routes in Flask
+    for rule in app.url_map.iter_rules():
+        options = {}
+        # no static function zone - nah
+        if rule.endpoint != 'static':
+            arguments ={}
+
+            # required for routes with required parameters
+            for arg in rule.arguments:
+                arguments[arg] = "[{0}]".format(arg)
+            print arguments
+
+
+            # build url with arguments
+            url = url_for(rule.endpoint, **arguments)
+
+            # build that JSON
+            options['url'] = urllib.unquote(url)
+            options['endpoint'] = rule.endpoint
+            options['doc'] = app.view_functions[rule.endpoint].__doc__
+            options['args'] = arguments
+
+            output[rule.endpoint] = options
+
+    return json.dumps(output)
+
+@app.route('/hello')
 def hello():
     """A simple route that will return a JSON structure of files in your root box directory
 
@@ -18,7 +48,8 @@ def hello():
 
     try:
         # gets root folder files/items
-        root_folder_files = get_folder_items(folder_id=0) #change to items for navigations
+        # change to items for better navigation
+        root_folder_files = get_folder_items(folder_id=0)
     except Exception as ex:
         return 'There was a problem using the Box Content API: {}'.format(ex.message), 500
 
