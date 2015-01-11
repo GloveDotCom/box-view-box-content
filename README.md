@@ -1,5 +1,5 @@
 
-x-view-box-content
+box-view-box-content
 ====================
 
 Showing how to use the Box Content API with the Box View API
@@ -32,7 +32,7 @@ In `settings.py`, update `VIEW_API_KEY` and `CONTENT_ACCESS_TOKEN` to be your ow
     
 ## Services Exposed 
     /
-    A site map - list all exposed services
+    Site Map - A list of all exposed services
     
     /hello
     A simple route displaying your base folder items 
@@ -41,8 +41,8 @@ In `settings.py`, update `VIEW_API_KEY` and `CONTENT_ACCESS_TOKEN` to be your ow
     Display a specific folder's items  
     
     /view/[file_id]
-    Given a specific file id convert into HTML using VIEW API
+    Given a specific file id convert it into HTML using the VIEW API
     
     /folder/[folder_id]/[type]
-    Display a specific item type in a folder
+    Display a specific type of item found in a folder [ex: 'file' or 'folder']
 
