@@ -30,9 +30,9 @@ In `settings.py`, update `VIEW_API_KEY` and `CONTENT_ACCESS_TOKEN` to be your ow
 
     python app.py
     
-## Services Exposed 
+## Exposed Endpoints 
     /
-    Site Map - A list of all exposed services
+    Site Map - A list of all exposed endpoints
     
     /hello
     A simple route displaying your base folder items 
