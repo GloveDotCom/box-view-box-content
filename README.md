@@ -2,7 +2,7 @@
 box-view-box-content
 ====================
 
-Showing how to use the Box Content API with the Box View API
+Showing how to use the [Box Content](https://developers.box.com/docs/) API with the [Box View](https://developers.box.com/view/) API
 
 ## Clone the Repo
 
