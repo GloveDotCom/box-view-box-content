@@ -2,7 +2,7 @@
 box-view-box-content
 ====================
 
-Showing how to use the Box Content API with the Box View API
+Showing how to use the [Box Content](https://developers.box.com/docs/) API with the [Box View](https://developers.box.com/view/) API
 
 ## Clone the Repo
 
@@ -30,9 +30,9 @@ In `settings.py`, update `VIEW_API_KEY` and `CONTENT_ACCESS_TOKEN` to be your ow
 
     python app.py
     
-## Services Exposed 
+## Exposed Endpoints 
     /
-    Site Map - A list of all exposed services
+    Site Map - A list of all exposed endpoints
     
     /hello
     A simple route displaying your base folder items 
